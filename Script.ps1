@@ -1,5 +1,4 @@
-#Install WinGet
-#Based on this gist: https://gist.github.com/crutkas/6c2096eae387e544bd05cde246f23901
+#Install WinGet if not installed
 $hasPackageManager = Get-AppPackage -name 'Microsoft.DesktopAppInstaller'
 if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.10.0.0") {
     "Installing winget Dependencies"
@@ -14,19 +13,13 @@ if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.
     "Installing winget from $($latestRelease.browser_download_url)"
     Add-AppxPackage -Path $latestRelease.browser_download_url
 }
-else {
-    "winget already installed"
-}
+else {"Winget already installed!"}
 
-#Configure WinGet
-Write-Output "Configuring winget"
-
-#winget config path from: https://github.com/microsoft/winget-cli/blob/master/doc/Settings.md#file-location
+#Configure WinGet - For documentation see: https://aka.ms/winget-settings
 $settingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json";
 $settingsJson = 
 @"
-    {
-        // For documentation on these settings, see: https://aka.ms/winget-settings
+    {        
         "experimentalFeatures": {
           "experimentalMSStore": true,
         }
@@ -34,10 +27,13 @@ $settingsJson =
 "@;
 $settingsJson | Out-File $settingsPath -Encoding utf8
 
-#Install New apps
-Write-Output "Installing Apps"
+#---------------------------------------------------------------------------------------------#
+
+
+#Install Apps
 $apps = @(
     @{name = "Microsoft.PowerToys" }
+	,@{name = "RARLab.WinRAR" }
 );
 Foreach ($app in $apps) {
     $listApp = winget list --exact -q $app.name
@@ -46,14 +42,9 @@ Foreach ($app in $apps) {
         if ($app.source -ne $null) {
             winget install --exact --silent $app.name --source $app.source
         }
-        else {
-            winget install --exact --silent $app.name 
-        }
+        else { winget install --exact --silent $app.name }
     }
-    else {
-        Write-host "Skipping Install of " $app.name
-    }
-}
+    else { Write-host "Skipping Install of " $app.name }}
 
 #Remove Apps
 #Write-Output "Removing Apps"
@@ -62,5 +53,4 @@ Foreach ($app in $apps) {
 #Foreach ($app in $apps)
 #{
 #  Write-host "Uninstalling:" $app
-#  Get-AppxPackage -allusers $app | Remove-AppxPackage
-#}
+#  Get-AppxPackage -allusers $app | Remove-AppxPackage}
