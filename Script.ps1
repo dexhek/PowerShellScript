@@ -13,7 +13,7 @@ if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.
     "Installing winget from $($latestRelease.browser_download_url)"
     Add-AppxPackage -Path $latestRelease.browser_download_url
 }
-else {"Winget already installed!"}
+else {" "}
 
 #Configure WinGet - For documentation see: https://aka.ms/winget-settings
 $settingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json";
@@ -28,12 +28,13 @@ $settingsJson =
 $settingsJson | Out-File $settingsPath -Encoding utf8
 
 #---------------------------------------------------------------------------------------------#
-
+#		Install/Uninstall Code
+#---------------------------------------------------------------------------------------------#
 
 #Install Apps
 $apps = @(
-    @{name = "Microsoft.PowerToys" }
-	,@{name = "RARLab.WinRAR" }
+    @{name = "RARLab.WinRAR" }
+	#,@{name = "RARLab.WinRAR" }
 );
 Foreach ($app in $apps) {
     $listApp = winget list --exact -q $app.name
@@ -43,14 +44,55 @@ Foreach ($app in $apps) {
             winget install --exact --silent $app.name --source $app.source
         }
         else { winget install --exact --silent $app.name }
-    }
-    else { Write-host "Skipping Install of " $app.name }}
+    }    
+	else { Write-host "Skipping Install of " $app.name }}
+
+
 
 #Remove Apps
-#Write-Output "Removing Apps"
-#
-#$apps = "*3DPrint*", "Microsoft.MixedReality.Portal"
-#Foreach ($app in $apps)
-#{
-#  Write-host "Uninstalling:" $app
-#  Get-AppxPackage -allusers $app | Remove-AppxPackage}
+$apps = @(
+     @{name = "Microsoft.MSPaint"}
+	,@{name = "Microsoft.GetHelp"}
+	,@{name = "Microsoft.Getstarted"}
+	,@{name = "Microsoft.Messaging"}
+	,@{name = "Microsoft.Microsoft3DViewer"}
+	,@{name = "Microsoft.MicrosoftOfficeHub"}
+	,@{name = "Microsoft.MicrosoftSolitaireCollection"}
+	,@{name = "Microsoft.NetworkSpeedTest"}                  
+	,@{name = "Microsoft.Office.Lens"}                
+	,@{name = "Microsoft.Office.OneNote"}
+	,@{name = "Microsoft.Office.Sway"}
+	,@{name = "Microsoft.OneConnect"}
+	,@{name = "Microsoft.People"}
+	,@{name = "Microsoft.Print3D"} 
+	,@{name = "Microsoft.WindowsFeedbackHub"}
+	,@{name = "Microsoft.WindowsMaps"}
+	,@{name = "Microsoft.Xbox.TCUI"}
+	,@{name = "Microsoft.XboxApp"}
+	,@{name = "Microsoft.XboxGameOverlay"}
+	,@{name = "Microsoft.XboxGamingOverlay"}
+	,@{name = "Microsoft.XboxIdentityProvider"}
+	,@{name = "Microsoft.XboxSpeechToTextOverlay"}
+	,@{name = "Microsoft.ZuneMusic"}
+	,@{name = "Microsoft.ZuneVideo"}
+	,@{name = "AdobeSystemsIncorporated.AdobePhotoshopExpress"}
+	,@{name = "PowerAutomateDesktop"}
+	,@{name = "CandyCrush"}
+	,@{name = "Duolingo"}	
+	,@{name = "EclipseManager"}	
+	,@{name = "Facebook"}	
+	,@{name = "king.com.FarmHeroesSaga"}	
+	,@{name = "Flipboard"}	
+	,@{name = "Netflix"}	
+	,@{name = "Twitter"}	
+	,@{name = "Todos"}	
+	
+);
+Foreach ($app in $apps){
+  Write-host "Uninstalling:" $app.name
+  Get-AppxPackage $app.name* | Remove-AppxPackage}
+  #winget uninstall $app.name --accept-source-agreements --silent}
+  
+#Update Apps
+Write-host "Updating installed apps:"
+winget upgrade --all
