@@ -37,16 +37,7 @@ $settingsJson | Out-File $settingsPath -Encoding utf8
 #Install New apps
 Write-Output "Installing Apps"
 $apps = @(
-    @{name = "Microsoft.AzureCLI" }, 
-    @{name = "Microsoft.PowerShell" }, 
-    @{name = "Microsoft.VisualStudioCode" }, 
-    @{name = "Microsoft.WindowsTerminal"; source = "msstore" }, 
-    @{name = "Microsoft.AzureStorageExplorer" }, 
-    @{name = "Microsoft.PowerToys" }, 
-    @{name = "Git.Git" }, 
-    @{name = "Docker.DockerDesktop" },
-    @{name = "Microsoft.dotnet" },
-    @{name = "GitHub.cli" }
+    @{name = "Microsoft.PowerToys" }
 );
 Foreach ($app in $apps) {
     $listApp = winget list --exact -q $app.name
@@ -65,11 +56,11 @@ Foreach ($app in $apps) {
 }
 
 #Remove Apps
-Write-Output "Removing Apps"
-
-$apps = "*3DPrint*", "Microsoft.MixedReality.Portal"
-Foreach ($app in $apps)
-{
-  Write-host "Uninstalling:" $app
-  Get-AppxPackage -allusers $app | Remove-AppxPackage
-}
+#Write-Output "Removing Apps"
+#
+#$apps = "*3DPrint*", "Microsoft.MixedReality.Portal"
+#Foreach ($app in $apps)
+#{
+#  Write-host "Uninstalling:" $app
+#  Get-AppxPackage -allusers $app | Remove-AppxPackage
+#}
