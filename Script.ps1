@@ -101,12 +101,15 @@ $apps = @(
 	,@{name = "*Todos*"}
 	,@{name = "*Teams*"}	
 	,@{name = "*AdobePhotoshopExpress*"}
-	,@{name = "*Weather*"}
+	,@{name = "Microsoft.BingWeather"}
+	
 	
 );
-Foreach ($app in $apps){  
-  Get-AppxPackage -Name $app.name| Remove-AppxPackage
-  Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online | Write-host DisplayName
+Foreach ($app in $apps){
+  Get-AppxPackage -Name $app.name| Remove-AppxPackage  
+}
+Foreach ($app in $apps){
+  Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
 }
 
 #Update Apps
