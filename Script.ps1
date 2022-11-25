@@ -105,9 +105,7 @@ $apps = @(
 	
 );
 Foreach ($app in $apps){
-  Get-AppxPackage -Name $app.name| Remove-AppxPackage | Write-host DisplayName
-}
-Foreach ($app in $apps){
+  Get-AppxPackage -Name $app.name| Remove-AppxPackage
   Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
 }
 
