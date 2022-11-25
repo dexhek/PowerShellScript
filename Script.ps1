@@ -22,6 +22,8 @@ $settingsJson =
     {        
         "experimentalFeatures": {
           "experimentalMSStore": true,
+		  "uninstall": true,
+		  "list": true
         }
     }
 "@;
@@ -76,21 +78,26 @@ $apps = @(
 	,@{name = "Microsoft.ZuneMusic"}
 	,@{name = "Microsoft.ZuneVideo"}
 	,@{name = "AdobeSystemsIncorporated.AdobePhotoshopExpress"}
-	,@{name = "PowerAutomateDesktop"}
-	,@{name = "CandyCrush"}
-	,@{name = "Duolingo"}	
-	,@{name = "EclipseManager"}	
-	,@{name = "Facebook"}	
-	,@{name = "king.com.FarmHeroesSaga"}	
-	,@{name = "Flipboard"}	
-	,@{name = "Netflix"}	
-	,@{name = "Twitter"}	
-	,@{name = "Todos"}	
+	,@{name = "*PowerAutomateDesktop*"}
+	,@{name = "*CandyCrush*"}
+	,@{name = "*Duolingo*"}	
+	,@{name = "*EclipseManager*"}	
+	,@{name = "*Facebook*"}	
+	,@{name = "*FarmHeroesSaga*"}	
+	,@{name = "*Flipboard*"}	
+	,@{name = "*Netflix*"}	
+	,@{name = "*Twitter*"}	
+	,@{name = "*Todos*"}
+	,@{name = "*Teams*"}	
 	
 );
 Foreach ($app in $apps){
   Write-host "Uninstalling:" $app.name
-  Get-AppxPackage $app.name* | Remove-AppxPackage}
+  #Get-AppxPackage -name $app.name | Remove-AppxPackage}
+  
+   Get-AppxPackage -Name $app.name| Remove-AppxPackage
+   Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online}
+
   #winget uninstall $app.name --accept-source-agreements --silent}
   
 #Update Apps
