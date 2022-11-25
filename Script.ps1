@@ -110,3 +110,6 @@ Foreach ($app in $apps){
 #Update Apps
 Write-host "Updating installed apps:"
 winget upgrade --all
+
+
+test
