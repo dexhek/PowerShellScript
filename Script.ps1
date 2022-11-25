@@ -100,11 +100,13 @@ $apps = @(
 	,@{name = "*Twitter*"}	
 	,@{name = "*Todos*"}
 	,@{name = "*Teams*"}	
+	,@{name = "*AdobePhotoshopExpress*"}
+	,@{name = "*Weather*"}
 	
 );
 Foreach ($app in $apps){  
   Get-AppxPackage -Name $app.name| Remove-AppxPackage
-  Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
+  Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online | Write-host DisplayName
 }
 
 #Update Apps
