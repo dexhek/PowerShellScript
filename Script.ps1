@@ -45,7 +45,7 @@ $settingsJson | Out-File $settingsPath -Encoding utf8
 
 #Install Apps
 $apps = @(
-    @{name = "RARLab.WinRAR" }
+    # @{name = "RARLab.WinRAR" }
 	#,@{name = "RARLab.WinRAR" }
 );
 Foreach ($app in $apps) {
@@ -100,12 +100,11 @@ $apps = @(
 	,@{name = "*Todos*"}
 	,@{name = "*Teams*"}	
 	,@{name = "*AdobePhotoshopExpress*"}
-	,@{name = "Microsoft.BingWeather"}
-	
-	
+	,@{name = "Microsoft.BingWeather"}	
 );
-Foreach ($app in $apps){
-  Get-AppxPackage -Name $app.name| Remove-AppxPackage
+
+Foreach ($app in $apps){  
+  Get-AppxPackage -Name $app.name | Remove-AppxPackage
   Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
 }
 
