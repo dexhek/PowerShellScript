@@ -6,7 +6,7 @@
 #    Exit}
 
 #no errors throughout
-$ErrorActionPreference = 'silentlycontinue'
+#$ErrorActionPreference = 'silentlycontinue'
 
 #Install WinGet if not installed
 $hasPackageManager = Get-AppPackage -name 'Microsoft.DesktopAppInstaller'
