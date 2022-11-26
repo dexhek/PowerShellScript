@@ -1,12 +1,9 @@
 #This will self elevate the script so with a UAC prompt since this script needs to be run as an Administrator in order to function properly.
-#If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
-#    Write-Host "You didn't run this script as an Administrator. This script will self elevate to run as an Administrator and continue."
-#    Start-Sleep 1
-#    Start-Process powershell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
-#    Exit}
-
-#no errors throughout
-#$ErrorActionPreference = 'silentlycontinue'
+If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
+    $Prompt = [System.Windows.MessageBox]::Show($Ask, "Run as an Administrator or not?", $Button, $ErrorIco) 
+    Switch ($Prompt) { Yes { Write-Host "You didn't run this script as an Administrator. This script will self elevate to run as an Administrator and continue."
+            Start-Process PowerShell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
+            Exit } No { Break }}}
 
 #Install WinGet if not installed
 $hasPackageManager = Get-AppPackage -name 'Microsoft.DesktopAppInstaller'
@@ -22,30 +19,26 @@ if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.
 
     "Installing winget from $($latestRelease.browser_download_url)"
     Add-AppxPackage -Path $latestRelease.browser_download_url
-}
-else {" "}
+}else {" "}
 
 #Configure WinGet - For documentation see: https://aka.ms/winget-settings
 $settingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json";
-$settingsJson = 
-@"
-    {        
-        "experimentalFeatures": {
-          "experimentalMSStore": true,
-		  "uninstall": true,
-		  "list": true
-        }
-    }
+$settingsJson = @" { "experimentalFeatures": {			
+          "experimentalMSStore": true,		  
+		  "uninstall": true
+		  }}
 "@;
 $settingsJson | Out-File $settingsPath -Encoding utf8
+
 
 #---------------------------------------------------------------------------------------------#
 #		Install/Uninstall Code
 #---------------------------------------------------------------------------------------------#
 
+
 #Install Apps
 $apps = @(
-    # @{name = "RARLab.WinRAR" }
+     @{name = "9WZDNCRFJ3Q2" }
 	#,@{name = "RARLab.WinRAR" }
 );
 Foreach ($app in $apps) {
@@ -53,13 +46,11 @@ Foreach ($app in $apps) {
     if (![String]::Join("", $listApp).Contains($app.name)) {
         Write-host "Installing:" $app.name
         if ($app.source -ne $null) {
-            winget install --exact --silent $app.name --source $app.source
+            winget install --exact --silent --accept-source-agreements $app.name --source $app.source
         }
-        else { winget install --exact --silent $app.name }
+        else { winget install --exact --silent --accept-source-agreements $app.name }
     }    
 	else { Write-host "Skipping Install of " $app.name }}
-
-
 
 #Remove Apps
 $apps = @(
@@ -105,7 +96,7 @@ $apps = @(
 
 Foreach ($app in $apps){  
   Get-AppxPackage -Name $app.name | Remove-AppxPackage
-  Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
+  #Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
 }
 
 #Update Apps
