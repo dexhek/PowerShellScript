@@ -55,50 +55,103 @@ Foreach ($app in $apps) {
 	else { Write-host "Skipping Install of " $app.name }}
 
 #Remove Apps
-$apps = @(
-     @{name = "Microsoft.MSPaint"}
-	,@{name = "Microsoft.GetHelp"}
-	,@{name = "Microsoft.Getstarted"}
-	,@{name = "Microsoft.Messaging"}
-	,@{name = "Microsoft.Microsoft3DViewer"}
-	,@{name = "Microsoft.MicrosoftOfficeHub"}
-	,@{name = "Microsoft.MicrosoftSolitaireCollection"}
-	,@{name = "Microsoft.NetworkSpeedTest"}                  
-	,@{name = "Microsoft.Office.Lens"}                
-	,@{name = "Microsoft.Office.OneNote"}
-	,@{name = "Microsoft.Office.Sway"}
-	,@{name = "Microsoft.OneConnect"}
-	,@{name = "Microsoft.People"}
-	,@{name = "Microsoft.Print3D"} 
-	,@{name = "Microsoft.WindowsFeedbackHub"}
-	,@{name = "Microsoft.WindowsMaps"}
-	,@{name = "Microsoft.Xbox.TCUI"}
-	,@{name = "Microsoft.XboxApp"}
-	,@{name = "Microsoft.XboxGameOverlay"}
-	,@{name = "Microsoft.XboxGamingOverlay"}
-	,@{name = "Microsoft.XboxIdentityProvider"}
-	,@{name = "Microsoft.XboxSpeechToTextOverlay"}
-	,@{name = "Microsoft.ZuneMusic"}
-	,@{name = "Microsoft.ZuneVideo"}
-	,@{name = "AdobeSystemsIncorporated.AdobePhotoshopExpress"}
-	,@{name = "*PowerAutomateDesktop*"}
-	,@{name = "*CandyCrush*"}
-	,@{name = "*Duolingo*"}	
-	,@{name = "*EclipseManager*"}	
-	,@{name = "*Facebook*"}	
-	,@{name = "*FarmHeroesSaga*"}	
-	,@{name = "*Flipboard*"}	
-	,@{name = "*Netflix*"}	
-	,@{name = "*Twitter*"}	
-	,@{name = "*Todos*"}
-	,@{name = "*Teams*"}	
-	,@{name = "*AdobePhotoshopExpress*"}
-	,@{name = "Microsoft.BingWeather"}	
-);
+$apps = @(				
+                "3DBuilder"
+                "Microsoft3DViewer"
+                "AppConnector"
+                "BingFinance"
+                "BingNews"
+                "BingSports"
+                "BingTranslator"
+                "BingWeather"
+                "BingFoodAndDrink"
+                "BingHealthAndFitness"
+                "BingTravel"
+                "MinecraftUWP"
+                "GamingServices"                
+                "GetHelp"
+                "Getstarted"
+                "Messaging"
+                "Microsoft3DViewer"
+                "MicrosoftSolitaireCollection"
+                "NetworkSpeedTest"
+                "News"
+                "Lens"
+                "Sway"
+                "OneNote"
+                "OneConnect"
+                "People"
+                "Print3D"
+                "SkypeApp"
+                "Todos"
+                "Wallet"
+                "Whiteboard"
+                "WindowsAlarms"
+                "windowscommunicationsapps"
+                "WindowsFeedbackHub"
+                "WindowsMaps"
+                "WindowsSoundRecorder"
+                "XboxApp"
+                "ConnectivityStore"           
+                "TCUI"
+                "XboxGameOverlay"
+                "XboxGameCallableUI"
+                "XboxSpeechToTextOverlay"
+                "MixedReality.Portal"
+                "ZuneMusic"
+                "ZuneVideo"               
+                "Getstarted"
+                "MicrosoftOfficeHub"
+
+                #Sponsored Windows 10 AppX Apps
+                #Add sponsored/featured apps to remove in the "*AppName*" format
+                "EclipseManager"
+                "ActiproSoftwareLLC"
+                "AdobeSystemsIncorporated.AdobePhotoshopExpress"
+                "Duolingo-LearnLanguagesforFree"
+                "PandoraMediaInc"
+                "CandyCrush"
+                "BubbleWitch3Saga"
+                "Wunderlist"
+                "Flipboard"
+                "Twitter"
+                "Facebook"
+                "Royal Revolt"
+                "Sway"
+                "Speed Test"
+                "Dolby"
+                "Viber"
+                "ACGMediaPlayer"
+                "Netflix"
+                "OneCalendar"
+                "LinkedInforWindows"
+                "HiddenCityMysteryofShadows"
+                "Hulu"
+                "HiddenCity"
+                "AdobePhotoshopExpress"
+                "HotspotShieldFreeVPN"
+
+                # HPBloatware Packages
+                "HPJumpStarts"
+                "HPPCHardwareDiagnosticsWindows"
+                "HPPowerManager"
+                "HPPrivacySettings"
+                "HPSupportAssistant"
+                "HPSureShieldAI"
+                "HPSystemInformation"
+                "HPQuickDrop"
+                "HPWorkWell"
+                "myHP"
+                "HPDesktopSupportUtilities"
+                "HPQuickTouch"
+                "HPEasyClean"
+                "HPSystemInformation"
+)
 
 Foreach ($app in $apps){  
-  Get-AppxPackage -Name $app.name | Remove-AppxPackage
-  #Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app.name | Remove-AppxProvisionedPackage -Online
+	Get-AppxPackage "*$app*" | Remove-AppxPackage -ErrorAction SilentlyContinue
+	Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$app*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+	Write-Host "Trying to remove $app."
 }
 
 #Update Apps
