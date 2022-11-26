@@ -40,7 +40,7 @@ $settingsJson | Out-File $settingsPath -Encoding utf8
 
 #Install Apps
 $apps = @(
-     @{name = "9WZDNCRFJ3Q2" }
+    # @{name = "9WZDNCRFJ3Q2" }
 	#,@{name = "RARLab.WinRAR" }
 );
 Foreach ($app in $apps) {
@@ -97,14 +97,12 @@ $apps = @(
                 "XboxGameOverlay"
                 "XboxGameCallableUI"
                 "XboxSpeechToTextOverlay"
-                "MixedReality.Portal"
+                "MixedReality"
                 "ZuneMusic"
                 "ZuneVideo"               
                 "Getstarted"
                 "MicrosoftOfficeHub"
 
-                #Sponsored Windows 10 AppX Apps
-                #Add sponsored/featured apps to remove in the "*AppName*" format
                 "EclipseManager"
                 "ActiproSoftwareLLC"
                 "AdobeSystemsIncorporated.AdobePhotoshopExpress"
