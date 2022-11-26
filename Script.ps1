@@ -23,7 +23,9 @@ if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.
 
 #Configure WinGet - For documentation see: https://aka.ms/winget-settings
 $settingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json";
-$settingsJson = @" { "experimentalFeatures": {			
+$settingsJson = 
+@"
+		{ "experimentalFeatures": {			
           "experimentalMSStore": true,		  
 		  "uninstall": true
 		  }}
@@ -32,7 +34,7 @@ $settingsJson | Out-File $settingsPath -Encoding utf8
 
 
 #---------------------------------------------------------------------------------------------#
-#		Install/Uninstall Code
+#		Install/Uninstall Script Code
 #---------------------------------------------------------------------------------------------#
 
 
@@ -46,9 +48,9 @@ Foreach ($app in $apps) {
     if (![String]::Join("", $listApp).Contains($app.name)) {
         Write-host "Installing:" $app.name
         if ($app.source -ne $null) {
-            winget install --exact --silent --accept-source-agreements $app.name --source $app.source
+            winget install --exact --silent --accept-source-agreements --accept-package-agreements $app.name --source $app.source
         }
-        else { winget install --exact --silent --accept-source-agreements $app.name }
+        else { winget install --exact --silent --accept-source-agreements --accept-package-agreements $app.name }
     }    
 	else { Write-host "Skipping Install of " $app.name }}
 
